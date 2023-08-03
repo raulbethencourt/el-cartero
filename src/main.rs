@@ -1,5 +1,5 @@
 use el_cartero::app::{App, AppResult};
-use el_cartero::event::{Event, EventHandler};
+use el_cartero::event::{EventHandler};
 use el_cartero::handler::handle_key_events;
 use el_cartero::tui::Tui;
 use std::io;
@@ -19,18 +19,11 @@ fn main() -> AppResult<()> {
 
     // Start the main loop.
     while app.running {
-        // Render the user interface.
         tui.draw(&mut app)?;
-        // Handle events.
-        match tui.events.next()? {
-            Event::Tick => app.tick(),
-            Event::Key(key_event) => handle_key_events(key_event, &mut app)?,
-            Event::Mouse(_) => {}
-            Event::Resize(_, _) => {}
-        }
+        
+        handle_key_events(&mut app)?;
     }
 
-    // Exit the user interface.
     tui.exit()?;
     Ok(())
 }
